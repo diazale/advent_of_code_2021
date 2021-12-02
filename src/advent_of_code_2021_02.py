@@ -23,25 +23,12 @@ def parse(d_):
 
 """
 Part 1: What do you get if you multiply your final horizontal position by your final depth?
+
+Note: Can be consolidated into one function (depth from Part 1 = aim from Part 2)
 """
 
-horizontal = 0
-depth = 0
-
-for d in directions:
-    direction, distance = parse(d)
-
-    if direction=="forward":
-        horizontal+=distance
-    elif direction=="up":
-        depth-=distance
-    elif direction=="down":
-        depth+=distance
-
-print(horizontal*depth)
-
 """
-Part 2
+Part 2:
 
 In addition to horizontal position and depth, you'll also need to track a third value, aim, which also starts at 0. 
 The commands also mean something entirely different than you first thought:
@@ -69,4 +56,4 @@ for d in directions:
         horizontal+=distance
         depth+=aim*distance
 
-print(horizontal*depth)
+print(horizontal*aim, horizontal*depth)
