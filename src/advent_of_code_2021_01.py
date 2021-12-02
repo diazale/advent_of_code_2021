@@ -3,46 +3,43 @@ To do this, count the number of times a depth measurement increases from the pre
 (There is no measurement before the first measurement.)
 """
 
-f = open("input_20211201.txt", "r")
+import numpy as np
+
+f = open("../data/input_20211201.txt", "r")
 in_data = f.read()
 f.close()
 
-# Read input; split by newline and drop empty line
-depths = list(map(int,in_data.rstrip().split("\n")))
-print(depths)
+# Read input; split by newline and drop empty line, and convert to numpy array
+depths = np.array(list(map(int,in_data.rstrip().split("\n"))))
 
+# Brute force: Loop and check neighbouring element
+# Array approach: subtract a shifted list from itself. Positive values indicate an increase in previous measurement.
+
+def shift(in_depths):
+    """
+    Function to shift a 1-D array by dropping the first element and padding with a 0 at the end.
+
+    :param in_depths: Input array of depths
+    :return: Array of depths shifted left by 1 with a dummy value of 0 appended to maintain array size
+    """
+    shifted = in_depths[1:]
+    shifted = np.append(shifted, 0)
+
+    return shifted
 
 """
 Part 1: How many measurements are larger than the previous measurement?
 """
-# Brute force: Loop and check neighbouring element
-# Logical approach: subtract a shifted list from itself? Convert to numpy and count positive differences
-import numpy as np
-shifted_depths = depths.copy()
-shifted_depths.pop(0)
-shifted_depths.append(0) # Dummy element
 
-depths = np.array(depths)
-shifted_depths = np.array(shifted_depths)
-
-diffs = shifted_depths[:-1] - depths[:-1] # Avoid dummy element
-
+diffs = shift(depths)[:-1] - depths[:-1] # Avoid dummy element
 print(sum(diffs > 0)) # Positive value means an increase in depth
 
 """
 Part 2: Compare the moving sums instead of single values
 """
 
-# Use a sliding kernel
+# Use a sliding kernel to sum the sliding 3-window
 summed_depths = np.convolve(depths,np.ones(3,dtype=int),'valid')
 
-shifted_summed_depths = summed_depths.copy()
-shifted_summed_depths = shifted_summed_depths[1:]
-shifted_summed_depths = np.append(shifted_summed_depths, 0)
-
-print(summed_depths)
-print(shifted_summed_depths)
-
-diffs = shifted_summed_depths[:-1] - summed_depths[:-1]
-
+diffs = shift(summed_depths)[:-1] - summed_depths[:-1]
 print(sum(diffs > 0))
