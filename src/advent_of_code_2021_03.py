@@ -88,25 +88,49 @@ def gamma_epsilon(m_):
 oxygen_matrix = diagnostics_matrix
 co2_matrix = diagnostics_matrix
 
-for c in range(0,diagnostics_matrix.shape[1]):
-    if oxygen_matrix.shape[0] > 1:
-        gamma_o2, epsilon_o2 = gamma_epsilon(oxygen_matrix)
-        oxygen_matrix = oxygen_matrix[oxygen_matrix[:,c]==gamma_o2[c],:]
+# Recursive approach
+def find_rating(m_, c_, gas_):
+    """
+    Recursively remove values until we're left with one row
+    Rows are removed using a boolean vector of whether the bit in column c_ matches the gamma/epsilon value
+    :param m_: Input binary matrix
+    :param c_: Current column (bit position)
+    :param gas_: "oxygen" or "co2"
+    :return:
+    """
+    if m_.shape[0]==1:
+        return m_.flatten()
+    else:
+        g, e = gamma_epsilon(m_)
+        if gas_=="oxygen":
+            return find_rating(m_[m_[:, c_] == g[c_], :], c_ + 1, "oxygen")
+        elif gas_=="co2":
+            return find_rating(m_[m_[:, c_] == e[c_], :], c_ + 1, "co2")
 
-        if oxygen_matrix.shape[0]==1:
-            oxygen_rate = oxygen_matrix.flatten()
-            print("Oxygen rate determined! On iteration:", c, "Rate:", oxygen_rate)
-
-    if co2_matrix.shape[0] > 1:
-        gamma_co2, epsilon_co2 = gamma_epsilon(co2_matrix)
-        co2_matrix = co2_matrix[co2_matrix[:,c]==epsilon_co2[c],:]
-
-        if co2_matrix.shape[0]==1:
-            co2_rate = co2_matrix.flatten()
-            print("CO2 rate determined! On iteration:", c, "Rate:", co2_rate)
+oxygen_rate = find_rating(diagnostics_matrix, 0, "oxygen")
+co2_rate = find_rating(diagnostics_matrix, 0, "co2")
 
 # Convert the values to decimal
 oxygen_rate = int("".join([str(int(o)) for o in oxygen_rate]),2)
 co2_rate = int("".join([str(int(c)) for c in co2_rate]),2)
 
 print(oxygen_rate*co2_rate)
+
+
+# Loop approach
+# for c in range(0,diagnostics_matrix.shape[1]):
+#     if oxygen_matrix.shape[0] > 1:
+#         gamma_o2, epsilon_o2 = gamma_epsilon(oxygen_matrix)
+#         oxygen_matrix = oxygen_matrix[oxygen_matrix[:,c]==gamma_o2[c],:]
+#
+#         if oxygen_matrix.shape[0]==1:
+#             oxygen_rate = oxygen_matrix.flatten()
+#             print("Oxygen rate determined! On iteration:", c, "Rate:", oxygen_rate)
+#
+#     if co2_matrix.shape[0] > 1:
+#         gamma_co2, epsilon_co2 = gamma_epsilon(co2_matrix)
+#         co2_matrix = co2_matrix[co2_matrix[:,c]==epsilon_co2[c],:]
+#
+#         if co2_matrix.shape[0]==1:
+#             co2_rate = co2_matrix.flatten()
+#             print("CO2 rate determined! On iteration:", c, "Rate:", co2_rate)
