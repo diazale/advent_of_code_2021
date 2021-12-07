@@ -42,3 +42,21 @@ for k in number_dict.keys():
     num_fish+=number_dict[k]
 
 print(num_fish)
+
+# Transition matrix approach
+transition_matrix = np.array([
+    [0,1,0,0,0,0,0,0,0],
+    [0,0,1,0,0,0,0,0,0],
+    [0,0,0,1,0,0,0,0,0],
+    [0,0,0,0,1,0,0,0,0],
+    [0,0,0,0,0,1,0,0,0],
+    [0,0,0,0,0,0,1,0,0],
+    [1,0,0,0,0,0,0,1,0],
+    [0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0]
+])
+
+fish_counts = np.array([np.sum(fish_ages==i) for i in range(9)])
+
+# Equation is ((Transition Matrix)^Days)*(Starting counts)
+print(np.sum(np.dot(fish_counts, np.linalg.matrix_power(transition_matrix.T, num_days))))
