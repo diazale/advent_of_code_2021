@@ -3,6 +3,7 @@ Crab submarine positions are listed. Align the positions.
 Moving 1 position costs 1 fuel.
 """
 
+import math
 import numpy as np
 
 f = open("../data/input_20211207.txt", "r")
@@ -25,7 +26,7 @@ How much fuel must they spend to align to that position?
 
 min_fuel_spent = np.sum(positions)
 
-for u in list(set(positions)):
+for u in [math.floor(np.median(positions)), math.ceil(np.median(positions))]:
 
     fuel_spent = np.abs(positions - u)
     min_fuel_spent = min(np.sum(fuel_spent), np.sum(min_fuel_spent))
@@ -52,7 +53,7 @@ def integer_sum(n):
 
 min_fuel_spent = 99999999
 
-for u in range(max(positions)):
+for u in [math.floor(np.mean(positions)), math.ceil(np.mean(positions))]:
     distances = np.apply_along_axis(integer_sum, 0, np.abs(positions - u))
     min_fuel_spent = min(np.sum(distances), min_fuel_spent)
 
