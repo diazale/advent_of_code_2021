@@ -47,7 +47,6 @@ print(coordinate_matrix.shape)
 # Fold along instruction line
 # y = Y means fold up along row Y
 # Everything below row Y is flipped and added to everything above row Y
-
 new_matrix = coordinate_matrix
 count = 0
 for i in instructions:
@@ -64,7 +63,7 @@ for i in instructions:
         print("Top starting shape:", top.shape)
         print("Bot starting shape:", bot_flipped.shape)
 
-        # If the bottom matrix is bigger, pad the flipped version with rows of zeroes on the top
+        # If the top matrix is bigger, pad the flipped version with rows of zeroes on the top
         if top.shape[0] > bot_flipped.shape[0]:
             bot_flipped = np.r_[np.zeros([abs(top.shape[0] - bot_flipped.shape[0]), bot_flipped.shape[1]]), bot_flipped]
 
@@ -91,14 +90,12 @@ for i in instructions:
 
         new_matrix = left + right_flipped
 
-        print(new_matrix.shape)
-
     count+=1
 
-    if count > 1:
+    #if count > 1:
         # Part 1
-        print(np.sum(new_matrix > 0))
-        break
+    #    print(np.sum(new_matrix > 0))
+    #    break
 
 """
 Part 2:
