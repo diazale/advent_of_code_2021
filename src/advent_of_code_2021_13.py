@@ -82,13 +82,12 @@ for i in instructions:
         print("Left starting shape:", left.shape)
         print("Right starting shape:", right_flipped.shape)
 
+        # If the left matrix is bigger, pad the flipped right matrix with columns of zeroes on the left side
         if left.shape[1] > right_flipped.shape[1]:
             right_flipped = np.c_[np.zeros([right_flipped.shape[0], 1]), right_flipped]
 
         print("Left padded shape:", left.shape)
         print("Right padded shape:", right_flipped.shape)
-
-        # If the left matrix is bigger, pad the flipped right matrix with columns of zeroes on the left side
 
         new_matrix = left + right_flipped
 
@@ -96,11 +95,15 @@ for i in instructions:
 
     count+=1
 
-    #if count > 1:
-    #    break
+    if count > 1:
+        # Part 1
+        print(np.sum(new_matrix > 0))
+        break
 
-print(new_matrix)
-print(np.sum(new_matrix > 0))
+"""
+Part 2:
+Carry out all the instructions and find the 8-letter code
+"""
 
 for row in range(new_matrix.shape[0]):
     temp = []
@@ -111,4 +114,3 @@ for row in range(new_matrix.shape[0]):
             temp.append(".")
 
     print("".join(temp))
-    #print(list(new_matrix[row,:]))
